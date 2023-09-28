@@ -398,11 +398,13 @@ pub fn serialize<W: Write>(w: &mut W, game: &Game) -> Result<()> {
 
 	game_end(w, &game.end, ver)?;
 
-	w.write_all(&[
-		0x55, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x7b,
-	])?;
-	ubjson::ser::from_map(w, &game.metadata_raw)?;
-	w.write_all(&[0x7d])?; // closing brace for `metadata`
+	if let Some(metadata_raw) = &game.metadata_raw {
+		w.write_all(&[
+			0x55, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x7b,
+		])?;
+		ubjson::ser::from_map(w, metadata_raw)?;
+		w.write_all(&[0x7d])?; // closing brace for `metadata`
+	}
 	w.write_all(&[0x7d])?; // closing brace for top-level map
 
 	Ok(())

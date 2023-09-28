@@ -330,10 +330,10 @@ pub struct Game {
 	pub frames: Frames,
 
 	#[serde(skip)]
-	pub metadata: metadata::Metadata,
+	pub metadata: Option<metadata::Metadata>,
 
 	#[serde(rename = "metadata")]
-	pub metadata_raw: serde_json::Map<String, serde_json::Value>,
+	pub metadata_raw: Option<serde_json::Map<String, serde_json::Value>>,
 
 	#[serde(skip)]
 	#[doc(hidden)]

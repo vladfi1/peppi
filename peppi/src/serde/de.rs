@@ -1006,21 +1006,24 @@ pub fn deserialize<R: Read, H: Handlers>(
 		));
 	}
 
-	expect_bytes(
-		&mut r,
-		// `metadata` key & type ("U\x08metadata{")
-		&[
-			0x55, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x7b,
-		],
-	)?;
+	let next = r.read_u8()?;
+	if next == 0x55 {
+		// U
+		expect_bytes(
+			&mut r,
+			// `metadata` key & type ("\x08metadata{")
+			&[0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x7b],
+		)?;
 
-	// Since we already read the opening "{" from the `metadata` value,
-	// we know it's a map. `parse_map` will consume the corresponding "}".
-	let metadata = ubjson::de::to_map(&mut r)?;
-	info!("Raw metadata: {}", serde_json::to_string(&metadata)?);
-	handlers.metadata(metadata)?;
-
-	expect_bytes(&mut r, &[0x7d])?; // top-level closing brace ("}")
+		// Since we already read the opening "{" from the `metadata` value,
+		// we know it's a map. `parse_map` will consume the corresponding "}".
+		let metadata = ubjson::de::to_map(&mut r)?;
+		info!("Raw metadata: {}", serde_json::to_string(&metadata)?);
+		handlers.metadata(metadata)?;
+		expect_bytes(&mut r, &[0x7d])?; // top-level closing brace ("}")
+	} else if next != 0x7d {
+		return Err(err!("Missing closing brace"));
+	}
 
 	handlers.finalize()?;
 	Ok(())
