@@ -6,7 +6,7 @@ use crate::{
 	frame::immutable::{
 		DreamlandWhispy, End, FodPlatform, Frame, Item, Post, Pre, StadiumTransformation, Start,
 	},
-	game::{self, immutable::Game, GeckoCodes, Player, PlayerType, Port, Quirks, MAX_PLAYERS, NUM_PORTS},
+	game::{self, immutable::Game, GeckoCodes, Player, PlayerType, Port, MAX_PLAYERS, NUM_PORTS},
 	io::{
 		slippi::{self, de::Event},
 		ubjson, Result,
@@ -51,7 +51,10 @@ impl PayloadSizes {
 }
 
 fn game_end_count(game: &Game) -> Result<u32> {
-	match (game.end.is_some(), game.quirks.map_or(false, |q| q.double_game_end)) {
+	match (
+		game.end.is_some(),
+		game.quirks.map_or(false, |q| q.double_game_end),
+	) {
 		(false, false) => Ok(0),
 		(true, false) => Ok(1),
 		(true, true) => Ok(2),
