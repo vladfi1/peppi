@@ -6,7 +6,7 @@ use crate::{
 	frame::immutable::{
 		DreamlandWhispy, End, FodPlatform, Frame, Item, Post, Pre, StadiumTransformation, Start,
 	},
-	game::{self, immutable::Game, GeckoCodes, Player, PlayerType, Port, MAX_PLAYERS, NUM_PORTS},
+	game::{self, immutable::Game, GeckoCodes, Player, PlayerType, Port, Quirks, MAX_PLAYERS, NUM_PORTS},
 	io::{
 		slippi::{self, de::Event},
 		ubjson, Result,
@@ -29,19 +29,15 @@ impl PayloadSizes {
 		self.sizes.push((event as u8, size.try_into().unwrap()))
 	}
 
-	fn raw_size(&self, game: &Game) -> u32 {
+	fn raw_size(&self, game: &Game) -> Result<u32> {
 		use Event::*;
 
 		let counts = frame_counts(&game.frames);
 		let sizes: std::collections::HashMap<u8, u16> =
 			self.sizes.iter().map(|(k, v)| (*k, *v)).collect();
-		1 + 1 + (3 * self.sizes.len() as u32) // Payload sizes
+		Ok(1 + 1 + (3 * self.sizes.len() as u32) // Payload sizes
 			+ 1 + sizes[&(GameStart as u8)] as u32 // GameStart
-			+ 1 + sizes[&(GameEnd as u8)] as u32 // GameEnd
-			+ match game.quirks.map_or(false, |q| q.double_game_end) {
-				true => 1 + sizes[&(GameEnd as u8)] as u32, // ...and another for good measure
-				_ => 0u32,
-			}
+			+ (1 + sizes[&(GameEnd as u8)] as u32) * game_end_count(game)? // GameEnd
 			+ counts.frame_data * (1 + sizes[&(FramePre as u8)] as u32) // FramePre
 			+ counts.frame_data * (1 + sizes[&(FramePost as u8)] as u32) // FramePost
 			+ sizes.get(&(FrameStart as u8)).map_or(0, |s| counts.frame * (1 + *s as u32)) // FrameStart
@@ -50,7 +46,16 @@ impl PayloadSizes {
 			+ sizes.get(&(FodPlatform as u8)).map_or(0, |s| counts.fod_platform * (1 + *s as u32)) // FodPlatform
 			+ sizes.get(&(DreamlandWhispy as u8)).map_or(0, |s| counts.dreamland_whispy * (1 + *s as u32)) // DreamlandWhispy
 			+ sizes.get(&(StadiumTransformation as u8)).map_or(0, |s| counts.stadium_transformation * (1 + *s as u32)) // StadiumTransformation
-			+ game.gecko_codes.as_ref().map_or(0, gecko_codes_size)
+			+ game.gecko_codes.as_ref().map_or(0, gecko_codes_size))
+	}
+}
+
+fn game_end_count(game: &Game) -> Result<u32> {
+	match (game.end.is_some(), game.quirks.map_or(false, |q| q.double_game_end)) {
+		(false, false) => Ok(0),
+		(true, false) => Ok(1),
+		(true, true) => Ok(2),
+		_ => Err(err!("`double_game_end` quirk is on, but no GameEnd event")),
 	}
 }
 
@@ -400,7 +405,7 @@ pub fn write<W: Write>(w: &mut W, game: &Game) -> Result<()> {
 	let payload_sizes = payload_sizes(game);
 
 	w.write_all(&slippi::FILE_SIGNATURE)?;
-	w.write_u32::<BE>(payload_sizes.raw_size(game))?;
+	w.write_u32::<BE>(payload_sizes.raw_size(game)?)?;
 
 	w.write_u8(Event::Payloads as u8)?;
 	// see "off-by-one" note in `de::parse_payloads`
