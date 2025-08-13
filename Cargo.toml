@@ -44,6 +44,10 @@ harness = false
 path = "benches/iai.rs"
 bench = false
 
+[[bin]]
+name = "copy_slp_metadata"
+path = "src/bin/copy_metadata.rs"
+
 [profile.bench]
 opt-level = 3
 debug = false
