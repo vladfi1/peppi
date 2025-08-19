@@ -78,7 +78,18 @@ fn copy_metadata(source: &Game, target: &mut Game) {
 
     for (source_player, target_player) in source_start.players.iter().zip(target_start.players.iter_mut()) {
         target_player.name_tag = source_player.name_tag.clone();
-        target_player.netplay = source_player.netplay.clone();
+
+        if let Some(ref source_netplay) = source_player.netplay {
+            if let Some(ref mut target_netplay) = target_player.netplay {
+                target_netplay.name = source_netplay.name.clone();
+                target_netplay.code = source_netplay.code.clone();
+                if source_netplay.suid.is_some() {
+                    target_netplay.suid = source_netplay.suid.clone();
+                }
+            } else {
+                target_player.netplay = Some(source_netplay.clone());
+            }
+        }
     }
 
     if let Some(ref source_match) = source_start.r#match {
