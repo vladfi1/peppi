@@ -419,6 +419,10 @@ impl StructArrayConvertible for End {
 				fields.push(Field::new("latest_finalized_frame", DataType::Int32, false))
 			}
 		};
+		// Arrow2 requires at least one field in a StructArray
+		if fields.is_empty() {
+			fields.push(Field::new("_dummy", DataType::Null, true));
+		}
 		DataType::Struct(fields)
 	}
 
@@ -427,18 +431,27 @@ impl StructArrayConvertible for End {
 		if version.gte(3, 7) {
 			values.push(self.latest_finalized_frame.unwrap().boxed())
 		};
+		// Arrow2 requires at least one field in a StructArray
+		if values.is_empty() {
+			let len = self.validity.as_ref().map_or(0, |v| v.len());
+			values.push(arrow2::array::NullArray::new(DataType::Null, len).boxed());
+		}
 		StructArray::new(Self::data_type(version), values, self.validity)
 	}
 
 	fn from_struct_array(array: StructArray, version: Version) -> Self {
 		let (_, values, validity) = array.into_data();
 		Self {
-			latest_finalized_frame: values.get(0).map(|x| {
-				x.as_any()
-					.downcast_ref::<PrimitiveArray<i32>>()
-					.unwrap()
-					.clone()
-			}),
+			latest_finalized_frame: if version.gte(3, 7) {
+				values.get(0).map(|x| {
+					x.as_any()
+						.downcast_ref::<PrimitiveArray<i32>>()
+						.unwrap()
+						.clone()
+				})
+			} else {
+				None
+			},
 			validity: validity,
 		}
 	}
