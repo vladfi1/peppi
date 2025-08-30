@@ -32,7 +32,7 @@ impl MeleeString {
 		self.0.clone().chars().map(fix_char).collect::<String>()
 	}
 
-	pub fn bytes(&self) -> std::borrow::Cow<[u8]> {
+	pub fn bytes(&self) -> std::borrow::Cow<'_, [u8]> {
 		let (result, encoding, unmapped) = SHIFT_JIS.encode(&self.0);
 		assert_eq!(encoding, SHIFT_JIS);
 		if unmapped {
