@@ -1,5 +1,5 @@
 use pretty_assertions::assert_eq;
-use serde_json::{from_str, json, to_string, Value};
+use serde_json::{Value, from_str, json, to_string};
 
 mod common;
 use common::game;

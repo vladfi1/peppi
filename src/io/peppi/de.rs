@@ -4,13 +4,13 @@ use log::debug;
 
 use arrow2::{
 	array::StructArray,
-	io::ipc::read::{read_stream_metadata, StreamReader, StreamState},
+	io::ipc::read::{StreamReader, StreamState, read_stream_metadata},
 };
 
 use crate::{
 	frame::{immutable::Frame, mutable::Frame as MutableFrame},
 	game::{self, immutable::Game, port_occupancy},
-	io::{expect_bytes, peppi, slippi, Result},
+	io::{Result, expect_bytes, peppi, slippi},
 };
 
 type JsMap = serde_json::Map<String, serde_json::Value>;

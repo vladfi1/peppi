@@ -5,13 +5,13 @@
 
 use std::fmt::{self, Debug, Display, Formatter};
 
-use base64::prelude::{Engine, BASE64_STANDARD};
+use base64::prelude::{BASE64_STANDARD, Engine};
 use num_enum::{IntoPrimitive, TryFromPrimitive};
-use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer, de};
 use serde_json::{Map, Value};
 
 use crate::{
-	frame::{transpose, PortOccupancy},
+	frame::{PortOccupancy, transpose},
 	game::shift_jis::MeleeString,
 	io::slippi::{self, Version},
 };

@@ -15,10 +15,10 @@ type BE = byteorder::BigEndian;
 use crate::{
 	frame::{self, mutable::Frame as MutableFrame, transpose},
 	game::{
-		self, immutable::Game, port_occupancy, shift_jis::MeleeString, Match, Netplay, Player,
-		PlayerType, Port, Quirks, MAX_PLAYERS, NUM_PORTS,
+		self, MAX_PLAYERS, Match, NUM_PORTS, Netplay, Player, PlayerType, Port, Quirks,
+		immutable::Game, port_occupancy, shift_jis::MeleeString,
 	},
-	io::{expect_bytes, slippi, ubjson, HashingReader, Result},
+	io::{HashingReader, Result, expect_bytes, slippi, ubjson},
 };
 
 type PayloadSizes = [Option<NonZeroU16>; 256];

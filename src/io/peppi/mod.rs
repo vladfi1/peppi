@@ -8,7 +8,7 @@ use std::{fmt, str};
 
 use crate::{
 	game::Quirks,
-	io::{parse_u8, Error, Result},
+	io::{Error, Result, parse_u8},
 };
 
 pub use de::read;

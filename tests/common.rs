@@ -6,7 +6,7 @@ use std::{
 
 use peppi::{
 	game::immutable::Game,
-	io::{slippi, Result},
+	io::{Result, slippi},
 };
 
 pub fn read_game(path: impl AsRef<Path>, skip_frames: bool) -> Result<Game> {

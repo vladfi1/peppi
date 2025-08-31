@@ -1,7 +1,7 @@
-use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion};
+use criterion::{BatchSize, BenchmarkId, Criterion, criterion_group, criterion_main};
 use peppi::{
 	self,
-	io::slippi::de::{read, Opts},
+	io::slippi::de::{Opts, read},
 };
 
 use std::{fs, io::Cursor, path::PathBuf, time::Duration};

@@ -6,10 +6,11 @@ use crate::{
 	frame::immutable::{
 		DreamlandWhispy, End, FodPlatform, Frame, Item, Post, Pre, StadiumTransformation, Start,
 	},
-	game::{self, immutable::Game, GeckoCodes, Player, PlayerType, Port, MAX_PLAYERS, NUM_PORTS},
+	game::{self, GeckoCodes, MAX_PLAYERS, NUM_PORTS, Player, PlayerType, Port, immutable::Game},
 	io::{
+		Result,
 		slippi::{self, de::Event},
-		ubjson, Result,
+		ubjson,
 	},
 };
 
@@ -125,11 +126,7 @@ fn gecko_codes<W: Write>(w: &mut W, codes: &GeckoCodes) -> Result<()> {
 }
 
 fn bool(b: bool) -> u8 {
-	if b {
-		1
-	} else {
-		0
-	}
+	if b { 1 } else { 0 }
 }
 
 fn player(start: &game::Start, port: usize) -> Option<&Player> {

@@ -4,7 +4,7 @@ use encoding_rs::SHIFT_JIS;
 use log::warn;
 use serde::{Deserialize, Serialize};
 
-use crate::io::{err, Error, Result};
+use crate::io::{Error, Result, err};
 
 /// Melee encodes strings using the Shift JIS character encoding for Japanese.
 /// This type represents a Shift JIS string that has been decoded to utf-8.

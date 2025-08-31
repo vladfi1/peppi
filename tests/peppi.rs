@@ -7,12 +7,12 @@ use ssbm_data::{action_state, character::External, character::Internal, item::It
 
 use peppi::{
 	frame::{
-		transpose::{self, Position},
 		Rollbacks,
+		transpose::{self, Position},
 	},
 	game::{
-		immutable::Game, shift_jis::MeleeString, Bytes, DashBack, End, EndMethod, Language, Match,
-		Netplay, Player, PlayerEnd, PlayerType, Port, Scene, ShieldDrop, Start, Ucf,
+		Bytes, DashBack, End, EndMethod, Language, Match, Netplay, Player, PlayerEnd, PlayerType,
+		Port, Scene, ShieldDrop, Start, Ucf, immutable::Game, shift_jis::MeleeString,
 	},
 	io::{
 		peppi::{self as io_peppi},
@@ -721,9 +721,11 @@ fn v3_16() {
 		.unwrap();
 
 	// player2 should be hit by player1 ids
-	assert!(player2_hit_bys
-		.values_iter()
-		.all(|id| *id == 0 || id_set.contains(id)));
+	assert!(
+		player2_hit_bys
+			.values_iter()
+			.all(|id| *id == 0 || id_set.contains(id))
+	);
 
 	let items = game.frames.item.as_ref().unwrap();
 	let item_instance_ids = items.instance_id.as_ref().unwrap();
@@ -731,10 +733,12 @@ fn v3_16() {
 
 	// Shy guy (210) should have instance id of 0
 	// The laser/gun should share instance id with the Fox player (P1)
-	assert!(item_instance_ids
-		.values_iter()
-		.zip(item_types.values_iter())
-		.all(|(&id, &r#type)| (r#type == 210 && id == 0) || id_set.contains(&id)));
+	assert!(
+		item_instance_ids
+			.values_iter()
+			.zip(item_types.values_iter())
+			.all(|(&id, &r#type)| (r#type == 210 && id == 0) || id_set.contains(&id))
+	);
 }
 
 #[test]

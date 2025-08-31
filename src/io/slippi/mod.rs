@@ -6,7 +6,7 @@ pub mod ser;
 use serde::{Deserialize, Serialize};
 use std::{fmt, str};
 
-use crate::io::{parse_u8, Error, Result};
+use crate::io::{Error, Result, parse_u8};
 
 pub use de::read;
 pub use ser::write;
