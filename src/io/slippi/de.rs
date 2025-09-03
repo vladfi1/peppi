@@ -822,7 +822,7 @@ pub fn parse_event<R: Read>(mut r: R, state: &mut ParseState, opts: Option<&Opts
 						.try_into()
 						.unwrap(),
 				);
-				if state.game.start.slippi.version.gte(3, 18) {
+				if state.game.start.slippi.version.gte(3, 17) {
 					push_offset::<u8>(
 						&mut state.game.frames.fod_platform_offset,
 						state
