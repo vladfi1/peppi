@@ -14,7 +14,7 @@ use crate::{
 		immutable::{Data, Frame, PortData},
 		PortOccupancy,
 	},
-	io::slippi::{de::Event, Version},
+	io::slippi::{de::Event, Version, STAGE_EVENTS_VERSION},
 };
 
 type BE = byteorder::BigEndian;
@@ -146,7 +146,7 @@ impl Frame {
 			for port in &self.ports {
 				port.write_pre(w, version, idx, frame_id)?;
 			}
-			if version.gte(3, 18) {
+			if version >= STAGE_EVENTS_VERSION {
 				// FOD platform
 				let offset = self.fod_platform_offset.as_ref().unwrap();
 				for evt_idx in (offset[idx] as usize)..(offset[idx + 1] as usize) {
