@@ -10,10 +10,10 @@ use arrow2::{
 
 use crate::{
 	frame::{
-		PortOccupancy,
 		immutable::{Data, Frame, PortData},
+		PortOccupancy,
 	},
-	game::{NUM_PORTS, Port},
+	game::{Port, NUM_PORTS},
 	io::slippi::Version,
 };
 
@@ -178,7 +178,7 @@ impl Frame {
 					Self::item_data_type(version).clone(),
 					false,
 				));
-				if version.gte(3, 18) {
+				if version.gte(3, 17) {
 					fields.push(Field::new(
 						"fod_platform",
 						Self::fod_platform_data_type(version).clone(),
@@ -224,7 +224,7 @@ impl Frame {
 					)
 					.boxed(),
 				);
-				if version.gte(3, 18) {
+				if version.gte(3, 17) {
 					let fod_platform_values = self
 						.fod_platform
 						.unwrap()
@@ -320,7 +320,7 @@ impl Frame {
 			if version.gte(3, 0) {
 				assert_eq!("end", fields[3].name);
 				assert_eq!("item", fields[4].name);
-				if version.gte(3, 18) {
+				if version.gte(3, 17) {
 					assert_eq!("fod_platform", fields[5].name);
 					assert_eq!("dreamland_whispy", fields[6].name);
 					assert_eq!("stadium_transformation", fields[7].name);
