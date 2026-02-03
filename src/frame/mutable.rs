@@ -17,7 +17,7 @@ use byteorder::ReadBytesExt;
 use std::io::Result;
 
 use crate::{
-	frame::{PortOccupancy, transpose},
+	frame::{transpose, PortOccupancy},
 	game::Port,
 	io::slippi::Version,
 };
