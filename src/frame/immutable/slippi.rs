@@ -11,10 +11,10 @@ use byteorder::WriteBytesExt;
 
 use crate::{
 	frame::{
-		immutable::{Data, Frame, PortData},
 		PortOccupancy,
+		immutable::{Data, Frame, PortData},
 	},
-	io::slippi::{de::Event, Version, STAGE_EVENTS_VERSION},
+	io::slippi::{STAGE_EVENTS_VERSION, Version, de::Event},
 };
 
 type BE = byteorder::BigEndian;

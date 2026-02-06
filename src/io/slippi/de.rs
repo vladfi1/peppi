@@ -18,7 +18,11 @@ use crate::{
 		self, MAX_PLAYERS, Match, NUM_PORTS, Netplay, Player, PlayerType, Port, Quirks,
 		immutable::Game, port_occupancy, shift_jis::MeleeString,
 	},
-	io::{HashingReader, Result, expect_bytes, slippi::{self, STAGE_EVENTS_VERSION}, ubjson},
+	io::{
+		HashingReader, Result, expect_bytes,
+		slippi::{self, STAGE_EVENTS_VERSION},
+		ubjson,
+	},
 };
 
 type PayloadSizes = [Option<NonZeroU16>; 256];

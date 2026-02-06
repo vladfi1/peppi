@@ -10,11 +10,11 @@ use arrow2::{
 
 use crate::{
 	frame::{
-		immutable::{Data, Frame, PortData},
 		PortOccupancy,
+		immutable::{Data, Frame, PortData},
 	},
-	game::{Port, NUM_PORTS},
-	io::slippi::{Version, STAGE_EVENTS_VERSION},
+	game::{NUM_PORTS, Port},
+	io::slippi::{STAGE_EVENTS_VERSION, Version},
 };
 
 trait StructArrayConvertible {
