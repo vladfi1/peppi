@@ -18,7 +18,7 @@ use std::fmt;
 use arrow2::{array::PrimitiveArray, bitmap::Bitmap, buffer::Buffer, offset::OffsetsBuffer};
 
 use crate::{
-	frame::{self, mutable, transpose, Rollbacks},
+	frame::{self, Rollbacks, mutable, transpose},
 	game::Port,
 	io::slippi::Version,
 };

@@ -10,10 +10,10 @@ use arrow2::{
 
 use crate::{
 	frame::{
-		immutable::{Data, Frame, PortData},
 		PortOccupancy,
+		immutable::{Data, Frame, PortData},
 	},
-	game::{Port, NUM_PORTS},
+	game::{NUM_PORTS, Port},
 	io::slippi::Version,
 };
 
